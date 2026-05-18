@@ -1,0 +1,177 @@
+{
+  "_note": "Fixture corpus for offline dev. ~12 representative GLP-1 + peptide therapeutics papers with synthesized abstracts. Real corpus comes from `pnpm --filter @novamind/corpus ingest`. Do not cite these PMIDs in any production output.",
+  "papers": [
+    {
+      "pmid": "F0001",
+      "title": "Tirzepatide once weekly for the treatment of obesity (SURMOUNT-1)",
+      "abstract": "Tirzepatide, a dual GIP and GLP-1 receptor agonist, was evaluated in adults with obesity over 72 weeks. Treatment produced substantial and sustained body-weight reduction relative to placebo across all dose arms, with gastrointestinal adverse events as the most common side effect.",
+      "year": 2022,
+      "journal": "New England Journal of Medicine",
+      "authors": ["Jastreboff AM", "Aronne LJ", "Ahmad NN"],
+      "meshTerms": [
+        "Obesity",
+        "Tirzepatide",
+        "GLP-1 Receptor Agonists",
+        "GIP Receptor",
+        "Body Weight"
+      ]
+    },
+    {
+      "pmid": "F0002",
+      "title": "Semaglutide for cardiovascular outcomes in type 2 diabetes (SUSTAIN-6)",
+      "abstract": "Once-weekly semaglutide reduced major adverse cardiovascular events in patients with type 2 diabetes at high cardiovascular risk over a median follow-up of approximately two years. The benefit appeared driven primarily by a reduction in nonfatal stroke.",
+      "year": 2016,
+      "journal": "New England Journal of Medicine",
+      "authors": ["Marso SP", "Bain SC", "Consoli A"],
+      "meshTerms": [
+        "Semaglutide",
+        "Cardiovascular Diseases",
+        "Diabetes Mellitus, Type 2",
+        "GLP-1 Receptor Agonists"
+      ]
+    },
+    {
+      "pmid": "F0003",
+      "title": "Once-weekly semaglutide in adults with overweight or obesity (STEP-1)",
+      "abstract": "STEP-1 evaluated subcutaneous semaglutide 2.4 mg weekly versus placebo for 68 weeks in adults with overweight or obesity. Mean body-weight reduction in the semaglutide arm was substantially greater than placebo, with gastrointestinal events common but typically mild and transient.",
+      "year": 2021,
+      "journal": "New England Journal of Medicine",
+      "authors": ["Wilding JPH", "Batterham RL", "Calanna S"],
+      "meshTerms": [
+        "Semaglutide",
+        "Obesity",
+        "Overweight",
+        "GLP-1 Receptor Agonists",
+        "Body Weight"
+      ]
+    },
+    {
+      "pmid": "F0004",
+      "title": "Triple agonist retatrutide for chronic weight management — phase 2",
+      "abstract": "Retatrutide, an agonist of the GIP, GLP-1, and glucagon receptors, was assessed in a phase 2 trial in adults with obesity. Higher dose arms produced mean weight reduction exceeding twenty-four percent at 48 weeks, with adverse events consistent with the incretin class.",
+      "year": 2023,
+      "journal": "New England Journal of Medicine",
+      "authors": ["Jastreboff AM", "Kaplan LM", "Frias JP"],
+      "meshTerms": [
+        "Retatrutide",
+        "Obesity",
+        "Glucagon",
+        "GIP Receptor",
+        "GLP-1 Receptor Agonists"
+      ]
+    },
+    {
+      "pmid": "F0005",
+      "title": "Tirzepatide versus semaglutide once weekly in type 2 diabetes (SURPASS-2)",
+      "abstract": "Head-to-head comparison of tirzepatide versus semaglutide 1 mg weekly in patients with type 2 diabetes inadequately controlled on metformin. Tirzepatide produced greater HbA1c reduction across dose arms, with similar gastrointestinal tolerability.",
+      "year": 2021,
+      "journal": "New England Journal of Medicine",
+      "authors": ["Frias JP", "Davies MJ", "Rosenstock J"],
+      "meshTerms": [
+        "Tirzepatide",
+        "Semaglutide",
+        "Diabetes Mellitus, Type 2",
+        "Glycated Hemoglobin"
+      ]
+    },
+    {
+      "pmid": "F0006",
+      "title": "Liraglutide and cardiovascular outcomes in type 2 diabetes (LEADER)",
+      "abstract": "Liraglutide reduced the risk of major adverse cardiovascular events versus placebo in patients with type 2 diabetes at high cardiovascular risk. Reductions in cardiovascular death and all-cause mortality were observed over a median 3.8-year follow-up.",
+      "year": 2016,
+      "journal": "New England Journal of Medicine",
+      "authors": ["Marso SP", "Daniels GH", "Brown-Frandsen K"],
+      "meshTerms": [
+        "Liraglutide",
+        "Cardiovascular Diseases",
+        "Diabetes Mellitus, Type 2",
+        "GLP-1 Receptor Agonists"
+      ]
+    },
+    {
+      "pmid": "F0007",
+      "title": "Mechanism of action of GLP-1 receptor agonists: pharmacology and clinical impact",
+      "abstract": "This review summarizes the pharmacology of GLP-1 receptor agonists, covering insulinotropic effects, glucagon suppression, gastric emptying, and central appetite regulation. Connections between molecular pharmacology and observed clinical outcomes in diabetes and obesity are discussed.",
+      "year": 2021,
+      "journal": "Cell Metabolism",
+      "authors": ["Drucker DJ"],
+      "meshTerms": [
+        "GLP-1 Receptor Agonists",
+        "Glucagon-like Peptide-1",
+        "Pharmacology",
+        "Insulin Secretion"
+      ]
+    },
+    {
+      "pmid": "F0008",
+      "title": "Lipidation strategies for half-life extension of therapeutic peptides",
+      "abstract": "Fatty-acid lipidation enables albumin binding, prolonging in vivo half-life of GLP-1 analogs and other peptide therapeutics. The review covers chain-length effects, linker chemistries, and case studies of approved lipidated peptides including liraglutide and semaglutide.",
+      "year": 2020,
+      "journal": "Journal of Medicinal Chemistry",
+      "authors": ["Knudsen LB", "Lau J"],
+      "meshTerms": [
+        "Peptides",
+        "Lipidation",
+        "Half-Life",
+        "Albumin",
+        "Drug Design"
+      ]
+    },
+    {
+      "pmid": "F0009",
+      "title": "PEGylation in peptide therapeutics: progress and current limitations",
+      "abstract": "PEGylation extends circulating half-life of peptide drugs by reducing renal clearance and proteolytic degradation. The review discusses immunogenicity concerns, conjugation site selection, and regulatory considerations relative to alternative half-life extension strategies.",
+      "year": 2019,
+      "journal": "Advanced Drug Delivery Reviews",
+      "authors": ["Veronese FM", "Mero A"],
+      "meshTerms": [
+        "Polyethylene Glycols",
+        "Peptides",
+        "Drug Design",
+        "Pharmacokinetics"
+      ]
+    },
+    {
+      "pmid": "F0010",
+      "title": "Oral delivery of peptide therapeutics: SNAC and beyond",
+      "abstract": "Permeation enhancers including sodium N-(8-[2-hydroxybenzoyl]amino)caprylate (SNAC) enable oral bioavailability of peptide therapeutics, exemplified by oral semaglutide. The review addresses absorption mechanisms, formulation strategies, and remaining bioavailability ceiling.",
+      "year": 2022,
+      "journal": "Nature Reviews Drug Discovery",
+      "authors": ["Brayden DJ", "Hill TA", "Fairlie DP"],
+      "meshTerms": [
+        "Peptides",
+        "Administration, Oral",
+        "Drug Delivery Systems",
+        "Bioavailability"
+      ]
+    },
+    {
+      "pmid": "F0011",
+      "title": "Cyclic peptides as therapeutics: design principles and clinical translation",
+      "abstract": "Cyclic peptides offer improved metabolic stability, conformational rigidity, and target selectivity over linear analogs. The review covers macrocyclization chemistries, screening platforms, and approved/clinical-stage examples spanning oncology, infectious disease, and metabolic indications.",
+      "year": 2020,
+      "journal": "Nature Reviews Drug Discovery",
+      "authors": ["Vinogradov AA", "Yin Y", "Suga H"],
+      "meshTerms": [
+        "Peptides, Cyclic",
+        "Drug Design",
+        "Drug Stability",
+        "Macrocyclic Compounds"
+      ]
+    },
+    {
+      "pmid": "F0012",
+      "title": "Peptide-drug conjugates for targeted oncology: design and clinical pipeline",
+      "abstract": "Peptide-drug conjugates combine receptor-targeting peptides with cytotoxic payloads to improve tumor selectivity. The review surveys linker chemistries, payload selection, and the late-stage clinical pipeline including somatostatin- and integrin-targeting agents.",
+      "year": 2023,
+      "journal": "Journal of Medicinal Chemistry",
+      "authors": ["Cooper BM", "Iegre J"],
+      "meshTerms": [
+        "Peptides",
+        "Drug Delivery Systems",
+        "Antineoplastic Agents",
+        "Receptors, Peptide"
+      ]
+    }
+  ]
+}

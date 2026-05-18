@@ -1,0 +1,62 @@
+{
+  "name": "novamind",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.4.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "eslint .",
+    "typecheck": "turbo run typecheck",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:live:eval:plan-stability": "pnpm --filter @novamind/eval plan-stability",
+    "test:live:eval:citation-accuracy": "pnpm --filter @novamind/eval citation-accuracy",
+    "test:live:improver-effort": "pnpm --filter @novamind/eval prompt-improver-effort",
+    "obs:cf:events": "node scripts/cloudflare-observability.mjs events",
+    "obs:cf:fields": "node scripts/cloudflare-observability.mjs fields",
+    "obs:cf:runs": "node scripts/cloudflare-observability.mjs runs",
+    "obs:cf:timeline": "node scripts/cloudflare-observability.mjs timeline",
+    "obs:cf:values": "node scripts/cloudflare-observability.mjs values",
+    "smoke:agent": "node scripts/smoke.mjs agent-health",
+    "smoke:agent:data-viz": "node scripts/smoke.mjs agent-data-viz",
+    "smoke:agent:eval": "node scripts/smoke.mjs agent-eval",
+    "smoke:agent:literature": "node scripts/smoke.mjs agent-literature",
+    "smoke:agent-sdk:structured-output": "node scripts/agent-sdk-structured-smoke.mjs",
+    "smoke:agent:startup": "node scripts/smoke.mjs agent-startup",
+    "smoke:data-viz": "node scripts/smoke.mjs data-viz",
+    "smoke:eval": "node scripts/smoke.mjs eval",
+    "smoke:literature": "node scripts/smoke.mjs literature",
+    "smoke:pages": "node scripts/smoke.mjs pages",
+    "smoke:startup": "node scripts/smoke.mjs startup",
+    "format:check": "prettier --check --ignore-unknown .",
+    "deploy:agent": "pnpm --filter @novamind/agent deploy:cf",
+    "deploy:web": "pnpm --filter @novamind/web deploy:cf",
+    "format": "prettier --write --ignore-unknown ."
+  },
+  "pnpm": {
+    "overrides": {
+      "@anthropic-ai/sdk": "0.91.1",
+      "dompurify": "3.4.0",
+      "postcss": "8.5.14"
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@next/eslint-plugin-next": "^15.5.18",
+    "@typescript-eslint/eslint-plugin": "^8.59.2",
+    "@typescript-eslint/parser": "^8.59.2",
+    "@cloudflare/containers": "^0.3.3",
+    "@opennextjs/cloudflare": "^1.19.8",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.4.2",
+    "turbo": "^2.9.12",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.5",
+    "wrangler": "^4.90.0"
+  }
+}

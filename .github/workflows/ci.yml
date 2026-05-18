@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  lint-typecheck-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Guard deterministic CI test command
+        run: node -e "const scripts=require('./package.json').scripts; if (/test:live:/.test(scripts.test || '')) throw new Error('CI test script must not run test:live:* scripts');"
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - name: Build web for Cloudflare Workers
+        env:
+          NEXT_PUBLIC_NOVAMIND_ACCESS_EMAIL_DOMAIN: example.com
+          CLOUDFLARE_ACCESS_AUD: ci-placeholder-aud
+          CLOUDFLARE_ACCESS_TEAM_DOMAIN: ci-placeholder.cloudflareaccess.com
+        run: pnpm --filter @novamind/web build:cf

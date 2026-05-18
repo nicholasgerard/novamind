@@ -1,0 +1,165 @@
+{
+  "_generated": "2026-05-09T00:00:00.000Z",
+  "_source": "clinicaltrials.gov",
+  "_sourceApiVersion": "fixture",
+  "_sourceDataTimestamp": "fixture",
+  "_query": "offline fallback GLP-1 trials fixture",
+  "_count": 4,
+  "studies": [
+    {
+      "nctId": "NCT01388361",
+      "title": "Comparison of Two Intensification Strategies in Type 2 Diabetes",
+      "overallStatus": "COMPLETED",
+      "phases": ["PHASE3"],
+      "conditions": ["Type 2 Diabetes"],
+      "interventions": [
+        { "name": "liraglutide", "type": "DRUG" },
+        { "name": "insulin degludec", "type": "DRUG" }
+      ],
+      "enrollmentCount": 409,
+      "enrollmentType": "ACTUAL",
+      "startDate": "2011-07",
+      "completionDate": "2013-03",
+      "hasResults": true
+    },
+    {
+      "nctId": "NCT03548935",
+      "title": "Semaglutide in Adults With Overweight or Obesity",
+      "overallStatus": "COMPLETED",
+      "phases": ["PHASE3"],
+      "conditions": ["Obesity"],
+      "interventions": [{ "name": "semaglutide", "type": "DRUG" }],
+      "enrollmentCount": 1961,
+      "enrollmentType": "ACTUAL",
+      "startDate": "2018-06",
+      "completionDate": "2020-03",
+      "hasResults": true
+    },
+    {
+      "nctId": "NCT03987919",
+      "title": "Tirzepatide Versus Semaglutide in Type 2 Diabetes",
+      "overallStatus": "COMPLETED",
+      "phases": ["PHASE3"],
+      "conditions": ["Type 2 Diabetes"],
+      "interventions": [
+        { "name": "tirzepatide", "type": "DRUG" },
+        { "name": "semaglutide", "type": "DRUG" }
+      ],
+      "enrollmentCount": 1879,
+      "enrollmentType": "ACTUAL",
+      "startDate": "2019-08",
+      "completionDate": "2021-02",
+      "hasResults": true
+    },
+    {
+      "nctId": "NCT04881760",
+      "title": "Retatrutide Phase 2 Study in Obesity",
+      "overallStatus": "COMPLETED",
+      "phases": ["PHASE2"],
+      "conditions": ["Obesity"],
+      "interventions": [{ "name": "retatrutide", "type": "DRUG" }],
+      "enrollmentCount": 338,
+      "enrollmentType": "ACTUAL",
+      "startDate": "2021-06",
+      "completionDate": "2023-04",
+      "hasResults": true
+    }
+  ],
+  "outcomes": [
+    {
+      "nctId": "NCT01388361",
+      "studyTitle": "Comparison of Two Intensification Strategies in Type 2 Diabetes",
+      "outcomeTitle": "Change From Baseline in HbA1c (%)",
+      "outcomeType": "PRIMARY",
+      "timeFrame": "week 0, week 26",
+      "groupId": "OG001",
+      "groupTitle": "IDeg + Liraglutide",
+      "value": -0.39,
+      "spread": 0.72,
+      "unit": "%"
+    },
+    {
+      "nctId": "NCT03548935",
+      "studyTitle": "Semaglutide in Adults With Overweight or Obesity",
+      "outcomeTitle": "Percent Change in Body Weight",
+      "outcomeType": "PRIMARY",
+      "timeFrame": "68 weeks",
+      "groupId": "OG001",
+      "groupTitle": "Semaglutide 2.4 mg",
+      "value": -14.9,
+      "spread": 0.6,
+      "unit": "%"
+    },
+    {
+      "nctId": "NCT03987919",
+      "studyTitle": "Tirzepatide Versus Semaglutide in Type 2 Diabetes",
+      "outcomeTitle": "Change From Baseline in HbA1c",
+      "outcomeType": "PRIMARY",
+      "timeFrame": "40 weeks",
+      "groupId": "OG001",
+      "groupTitle": "Tirzepatide 15 mg",
+      "value": -2.3,
+      "spread": 0.1,
+      "unit": "%"
+    },
+    {
+      "nctId": "NCT03987919",
+      "studyTitle": "Tirzepatide Versus Semaglutide in Type 2 Diabetes",
+      "outcomeTitle": "Change From Baseline in HbA1c",
+      "outcomeType": "PRIMARY",
+      "timeFrame": "40 weeks",
+      "groupId": "OG002",
+      "groupTitle": "Semaglutide 1 mg",
+      "value": -1.9,
+      "spread": 0.1,
+      "unit": "%"
+    },
+    {
+      "nctId": "NCT04881760",
+      "studyTitle": "Retatrutide Phase 2 Study in Obesity",
+      "outcomeTitle": "Percent Change in Body Weight",
+      "outcomeType": "PRIMARY",
+      "timeFrame": "48 weeks",
+      "groupId": "OG001",
+      "groupTitle": "Retatrutide 12 mg",
+      "value": -24.2,
+      "spread": 1.1,
+      "unit": "%"
+    }
+  ],
+  "adverseEvents": [
+    {
+      "nctId": "NCT01388361",
+      "studyTitle": "Comparison of Two Intensification Strategies in Type 2 Diabetes",
+      "term": "Diarrhoea",
+      "organSystem": "Gastrointestinal disorders",
+      "groupId": "EG001",
+      "groupTitle": "IDeg + Liraglutide",
+      "serious": false,
+      "numAffected": 9,
+      "numAtRisk": 87
+    },
+    {
+      "nctId": "NCT03987919",
+      "studyTitle": "Tirzepatide Versus Semaglutide in Type 2 Diabetes",
+      "term": "Nausea",
+      "organSystem": "Gastrointestinal disorders",
+      "groupId": "EG001",
+      "groupTitle": "Tirzepatide 15 mg",
+      "serious": false,
+      "numAffected": 48,
+      "numAtRisk": 310
+    },
+    {
+      "nctId": "NCT04881760",
+      "studyTitle": "Retatrutide Phase 2 Study in Obesity",
+      "term": "Nausea",
+      "organSystem": "Gastrointestinal disorders",
+      "groupId": "EG001",
+      "groupTitle": "Retatrutide 12 mg",
+      "serious": false,
+      "numAffected": 20,
+      "numAtRisk": 48
+    }
+  ]
+}

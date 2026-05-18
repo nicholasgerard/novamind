@@ -1,0 +1,176 @@
+name: Deploy agent
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/agent/**"
+      - "packages/pipeline/**"
+      - "packages/eval/**"
+      - "packages/shared/**"
+      - "packages/corpus/**"
+      - "Dockerfile.agent"
+      - ".dockerignore"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/deploy-agent.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Validate deploy configuration
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+          NOVAMIND_AGENT_INTERNAL_TOKEN: ${{ secrets.NOVAMIND_AGENT_INTERNAL_TOKEN }}
+          NOVAMIND_PAPERS_URL: ${{ vars.NOVAMIND_PAPERS_URL }}
+          NOVAMIND_VOYAGE_EMBEDDINGS_URL: ${{ vars.NOVAMIND_VOYAGE_EMBEDDINGS_URL }}
+          NOVAMIND_TRIALS_URL: ${{ vars.NOVAMIND_TRIALS_URL }}
+          NOVAMIND_WEB_ORIGIN: ${{ vars.NOVAMIND_WEB_ORIGIN }}
+          NOVAMIND_ACCESS_EMAIL_DOMAIN: ${{ vars.NOVAMIND_ACCESS_EMAIL_DOMAIN }}
+          CLOUDFLARE_ACCESS_AUD: ${{ vars.CLOUDFLARE_ACCESS_AUD }}
+          CLOUDFLARE_ACCESS_TEAM_DOMAIN: ${{ vars.CLOUDFLARE_ACCESS_TEAM_DOMAIN }}
+        run: |
+          missing=0
+          for name in \
+            CLOUDFLARE_API_TOKEN \
+            CLOUDFLARE_ACCOUNT_ID \
+            ANTHROPIC_API_KEY \
+            OPENAI_API_KEY \
+            VOYAGE_API_KEY \
+            NOVAMIND_AGENT_INTERNAL_TOKEN \
+            NOVAMIND_PAPERS_URL \
+            NOVAMIND_VOYAGE_EMBEDDINGS_URL \
+            NOVAMIND_TRIALS_URL \
+            NOVAMIND_WEB_ORIGIN \
+            NOVAMIND_ACCESS_EMAIL_DOMAIN \
+            CLOUDFLARE_ACCESS_AUD \
+            CLOUDFLARE_ACCESS_TEAM_DOMAIN
+          do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Required deploy value $name is empty"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Deploy Worker + Container
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm --filter @novamind/agent deploy:cf:ci
+
+      - name: Upload agent runtime secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+          BRAINTRUST_API_KEY: ${{ secrets.BRAINTRUST_API_KEY }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+          NCBI_EMAIL: ${{ secrets.NCBI_EMAIL }}
+          NOVAMIND_AGENT_INTERNAL_TOKEN: ${{ secrets.NOVAMIND_AGENT_INTERNAL_TOKEN }}
+          NOVAMIND_PAPERS_URL: ${{ vars.NOVAMIND_PAPERS_URL }}
+          NOVAMIND_VOYAGE_EMBEDDINGS_URL: ${{ vars.NOVAMIND_VOYAGE_EMBEDDINGS_URL }}
+          NOVAMIND_OPENAI_EMBEDDINGS_URL: ${{ vars.NOVAMIND_OPENAI_EMBEDDINGS_URL }}
+          NOVAMIND_TRIALS_URL: ${{ vars.NOVAMIND_TRIALS_URL }}
+          NOVAMIND_WEB_ORIGIN: ${{ vars.NOVAMIND_WEB_ORIGIN }}
+          NOVAMIND_ACCESS_EMAIL_DOMAIN: ${{ vars.NOVAMIND_ACCESS_EMAIL_DOMAIN }}
+          CLOUDFLARE_ACCESS_AUD: ${{ vars.CLOUDFLARE_ACCESS_AUD }}
+          CLOUDFLARE_ACCESS_TEAM_DOMAIN: ${{ vars.CLOUDFLARE_ACCESS_TEAM_DOMAIN }}
+        run: |
+          put_secret() {
+            local name="$1"
+            local value="${!name:-}"
+            if [ -z "$value" ]; then
+              echo "::error::Required deploy value $name is empty"
+              return 1
+            fi
+            printf '%s' "$value" | pnpm exec wrangler secret put "$name" --config apps/agent/wrangler.toml
+          }
+
+          put_optional_secret() {
+            local name="$1"
+            local value="${!name:-}"
+            if [ -n "$value" ]; then
+              printf '%s' "$value" | pnpm exec wrangler secret put "$name" --config apps/agent/wrangler.toml
+            fi
+          }
+
+          for name in \
+            ANTHROPIC_API_KEY \
+            OPENAI_API_KEY \
+            VOYAGE_API_KEY \
+            NOVAMIND_AGENT_INTERNAL_TOKEN \
+            NOVAMIND_PAPERS_URL \
+            NOVAMIND_VOYAGE_EMBEDDINGS_URL \
+            NOVAMIND_TRIALS_URL \
+            NOVAMIND_WEB_ORIGIN \
+            NOVAMIND_ACCESS_EMAIL_DOMAIN \
+            CLOUDFLARE_ACCESS_AUD \
+            CLOUDFLARE_ACCESS_TEAM_DOMAIN
+          do
+            put_secret "$name"
+          done
+
+          for name in \
+            BRAINTRUST_API_KEY \
+            NCBI_API_KEY \
+            NCBI_EMAIL \
+            NOVAMIND_OPENAI_EMBEDDINGS_URL
+          do
+            put_optional_secret "$name"
+          done
+
+      - name: Smoke runtime startup
+        env:
+          AGENT_ORIGIN: ${{ vars.NOVAMIND_AGENT_ORIGIN || vars.AGENT_BASE_URL }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+          NOVAMIND_AGENT_INTERNAL_TOKEN: ${{ secrets.NOVAMIND_AGENT_INTERNAL_TOKEN }}
+          NOVAMIND_ACCESS_EMAIL_DOMAIN: ${{ vars.NOVAMIND_ACCESS_EMAIL_DOMAIN }}
+          NOVAMIND_DEV_ACCESS_EMAIL: deploy-smoke@${{ vars.NOVAMIND_ACCESS_EMAIL_DOMAIN }}
+        run: |
+          if [ -z "$AGENT_ORIGIN" ]; then
+            echo "NOVAMIND_AGENT_ORIGIN or AGENT_BASE_URL repository variable is required for post-deploy agent startup smoke." >&2
+            exit 1
+          fi
+          for attempt in 1 2 3; do
+            if pnpm smoke:agent:startup -- --timeout-ms 150000; then
+              exit 0
+            fi
+            status="$?"
+            if [ "$attempt" -eq 3 ]; then
+              exit "$status"
+            fi
+            sleep "$((attempt * 15))"
+          done

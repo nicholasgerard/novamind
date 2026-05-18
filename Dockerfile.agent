@@ -1,0 +1,65 @@
+# syntax=docker/dockerfile:1.7
+
+FROM node:22-slim@sha256:88f44fbb06cc98e1451e4e015c122f84030ec55c603f753ed97b889db0bb8d4d AS base
+WORKDIR /app
+RUN corepack enable
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates musl \
+    && rm -rf /var/lib/apt/lists/*
+
+FROM base AS build
+COPY . .
+RUN pnpm install --frozen-lockfile --filter "@novamind/agent..."
+RUN pnpm --filter @novamind/agent build
+RUN pnpm --filter @novamind/agent deploy --prod --legacy /app/deploy/agent
+
+# The app code is bundled, but @anthropic-ai/claude-agent-sdk is external so its
+# linux native Claude Code binary is available in node_modules.
+FROM node:22-slim@sha256:88f44fbb06cc98e1451e4e015c122f84030ec55c603f753ed97b889db0bb8d4d AS runtime
+WORKDIR /app/apps/agent
+ENV NODE_ENV=production
+ENV PORT=8787
+ENV CLAUDE_CONFIG_DIR=/tmp/.claude
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates musl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /app/deploy/agent/node_modules ./node_modules
+COPY --from=build /app/deploy/agent/dist ./dist
+COPY --from=build /app/deploy/agent/package.json ./package.json
+RUN mkdir -p /tmp/.claude \
+    && chown -R node:node /tmp/.claude
+RUN node -e '\
+  const { createRequire } = require("node:module"); \
+  const { spawnSync } = require("node:child_process"); \
+  const fs = require("node:fs"); \
+  const req = createRequire("/app/apps/agent/dist/server.js"); \
+  const sdkReq = createRequire(req.resolve("@anthropic-ai/claude-agent-sdk")); \
+  const candidates = [ \
+    `@anthropic-ai/claude-agent-sdk-linux-${process.arch}/claude`, \
+    `@anthropic-ai/claude-agent-sdk-linux-${process.arch}-musl/claude`, \
+  ]; \
+  let spec; \
+  let path; \
+  for (const candidate of candidates) { \
+    try { \
+      path = sdkReq.resolve(candidate); \
+      spec = candidate; \
+      break; \
+    } catch {} \
+  } \
+  if (!path) throw new Error(`No Claude Agent SDK native binary found for ${process.arch}`); \
+  fs.accessSync(path, fs.constants.X_OK); \
+  const result = spawnSync(path, ["--version"], { encoding: "utf8" }); \
+  if (result.status !== 0) throw new Error(result.stderr || result.stdout || `Failed to execute ${path}`); \
+  console.log(`[agent] ${spec} available at ${path}: ${result.stdout.trim()}`); \
+'
+
+EXPOSE 8787
+HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
+  CMD curl -f http://localhost:8787/health || exit 1
+
+USER node
+
+CMD ["node", "dist/server.js"]

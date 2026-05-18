@@ -1,0 +1,36 @@
+"$schema" = "../../node_modules/wrangler/config-schema.json"
+name = "novamind-agent"
+main = "src/worker.ts"
+compatibility_date = "2026-05-09"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[version_metadata]
+binding = "CF_VERSION_METADATA"
+
+[[containers]]
+class_name = "NovaMindAgent"
+image = "../../Dockerfile.agent"
+max_instances = 1
+
+  [containers.instance_type]
+  vcpu = 1
+  memory_mib = 3072
+  disk_mb = 5000
+
+[[durable_objects.bindings]]
+name = "NOVAMIND_AGENT"
+class_name = "NovaMindAgent"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["NovaMindAgent"]
+
+[vars]
+NCBI_TOOL = "novamind-corpus"
+DEMO_FIXTURE_MODE = "false"
+INJECT_UNVERIFIED_CLAIM = "true"
+NOVAMIND_AGENT_INSTANCE = "demo-primary"
